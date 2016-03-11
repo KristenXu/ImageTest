@@ -7,7 +7,20 @@ public class BinaryFilter extends AbstractBufferedImageOp {
 	public final static int MEAN_THRESHOLD = 2;
 	public final static int SHIFT_THRESHOLD = 4;
 
+	private int countBlack = 0;
+
+	private int countPixels = 0;
+
 	private int thresholdType;
+
+	public int getBlackNum() {
+		return this.countBlack;
+	}
+
+	public int getPixelsNum(){
+		return this.countPixels;
+	}
+
 
 	public BinaryFilter() {
 		thresholdType = SHIFT_THRESHOLD;
@@ -46,10 +59,14 @@ public class BinaryFilter extends AbstractBufferedImageOp {
 					tr = tg = tb = 255; // white
 				} else {
 					tr = tg = tb = 0; // black
+					countBlack++;
 				}
 				outPixels[index] = (ta << 24) | (tr << 16) | (tg << 8) | tb;
 			}
 		}
+		countPixels = outPixels.length;
+		System.out.print("countBlack: "+countBlack);
+		System.out.print("countPixels: "+outPixels.length);
 		setRGB(dest, 0, 0, width, height, outPixels);
 		return dest;
 	}

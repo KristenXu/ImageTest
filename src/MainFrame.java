@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by xuchen on 16/3/4.
@@ -31,6 +33,15 @@ public class MainFrame extends JComponent implements ActionListener {
 
     // rice number....
     private int riceNum = -1;
+
+    //black number....
+    private int blackNum = 0;
+
+    //pixels number....
+    private int pixelsNum = 0;
+
+    //blackPercent
+    private double blackPercent;//
 
 
     public MainFrame() {
@@ -83,11 +94,22 @@ public class MainFrame extends JComponent implements ActionListener {
         }
 
         g2.setPaint(Color.RED);
-        if(riceNum > 0) {
-            g2.drawString("Number : " + riceNum, 100, 300);
+        g2.setFont(new Font("楷体",Font.PLAIN,15));
+        if(blackNum > 0) {
+            //g2.drawString("Number : " + riceNum, 100, 230);
+            g2.drawString("BlackArea : " + blackNum + "; ImageArea : " + pixelsNum, 100, 250);
         } else {
-            g2.drawString("Number : Unknown", 100, 300);
+            //g2.drawString("Number : Unknown", 100, 230);
+            g2.drawString("BlackArea : Unknown", 100, 250);
         }
+
+        if(blackNum>0&&pixelsNum>0){
+            blackPercent=(Math.round(blackNum*100.0/pixelsNum));
+            g2.drawString("BlackPercent : " + blackPercent + "%" , 100, 270);
+        }else{
+            g2.drawString("BlackPercent : Unknown", 100, 270);
+        }
+
     }
     public Dimension getPreferredSize() {
         return mySize;
@@ -120,6 +142,22 @@ public class MainFrame extends JComponent implements ActionListener {
                 e1.printStackTrace();
             }
 
+//            BufferedImage bImage = null;
+//            URL url=null;
+//            try{
+//
+//                url = new URL("http://7fve54.com1.z0.glb.clouddn.com/Ekf9mnoC/cilkjkf7o006ho0m3a5qzdyii/display");
+//            }catch (MalformedURLException e2){
+//                e2.printStackTrace();
+//            }
+//            try {
+//                bImage = ImageIO.read(url);
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+
+
+
             tracker = new MediaTracker(this);
             tracker.addImage(bImage, 1);
 
@@ -135,6 +173,8 @@ public class MainFrame extends JComponent implements ActionListener {
             } // end catch
             BinaryFilter bfilter = new BinaryFilter();
             rawImg = bfilter.filter(bImage, null);
+            blackNum = bfilter.getBlackNum();
+            pixelsNum = bfilter.getPixelsNum();
             repaint();
         } else if(NOISE_CMD.equals(e.getActionCommand())) {
             FindRiceFilter frFilter = new FindRiceFilter();
