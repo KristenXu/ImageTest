@@ -130,13 +130,20 @@ public class MainFrame extends JComponent implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(BROWSE_CMD.equals(e.getActionCommand())) {
-            JFileChooser chooser = new JFileChooser();
-            chooser.showOpenDialog(null);
-            File f = chooser.getSelectedFile();
+//            JFileChooser chooser = new JFileChooser();
+//            chooser.showOpenDialog(null);
+//            File f = chooser.getSelectedFile();
             BufferedImage bImage = null;
-            if(f == null) return;
+            String str = "http://120.27.47.178:8888/show";
+            URL url = null;
+            try{
+                url = new URL(str);
+            }catch (MalformedURLException mf){
+                mf.printStackTrace();
+            }
+//            if(f == null) return;
             try {
-                bImage = ImageIO.read(f);
+                bImage = ImageIO.read(url);
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -171,12 +178,13 @@ public class MainFrame extends JComponent implements ActionListener {
                 ine.printStackTrace();
                 System.exit(1);
             } // end catch
-            BinaryFilter bfilter = new BinaryFilter();
-            rawImg = bfilter.filter(bImage, null);
-            blackNum = bfilter.getBlackNum();
-            pixelsNum = bfilter.getPixelsNum();
+            rawImg = bImage;
             repaint();
         } else if(NOISE_CMD.equals(e.getActionCommand())) {
+            BinaryFilter bfilter = new BinaryFilter();
+            rawImg = bfilter.filter(rawImg, null);
+            blackNum = bfilter.getBlackNum();
+            pixelsNum = bfilter.getPixelsNum();
             FindRiceFilter frFilter = new FindRiceFilter();
             resultImage = frFilter.filter(rawImg, null);
             riceNum = frFilter.getSumRice();
