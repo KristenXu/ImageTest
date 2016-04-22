@@ -1,3 +1,6 @@
+import com.sun.xml.internal.fastinfoset.sax.Properties;
+import com.sun.xml.internal.fastinfoset.sax.SystemIdResolver;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -142,8 +145,29 @@ public class MainFrame extends JComponent implements ActionListener {
                 mf.printStackTrace();
             }
 //            if(f == null) return;
+            java.util.Properties properties = System.getProperties();
+            System.out.println("system : "+ properties);
+            JTextArea jta = new JTextArea(properties.toString());
+            JScrollPane jsp = new JScrollPane(jta){
+                @Override
+                public Dimension getPreferredSize() {
+                    return new Dimension(480, 320);
+                }
+            };
+            JOptionPane.showMessageDialog(this, jsp,
+                    "Error",JOptionPane.ERROR_MESSAGE);
+            File path = new File("/Users/xuchen/Desktop/图像源");
+            File[] files = path.listFiles();
+            File lastModifiedFile = files[0];
+            for(int index = 0;index<files.length;index++){
+                if(lastModifiedFile.lastModified() <= files[index].lastModified()){
+                    lastModifiedFile = files[index];
+                }
+            }
+
             try {
-                bImage = ImageIO.read(url);
+                bImage = ImageIO.read(lastModifiedFile);
+                System.out.println("lastModified : "+lastModifiedFile.getName());
 
             } catch (IOException e1) {
                 e1.printStackTrace();
