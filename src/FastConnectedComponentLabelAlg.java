@@ -10,7 +10,6 @@ public class FastConnectedComponentLabelAlg {
     private int[] outData;
     private int dw;
     private int dh;
-
     public FastConnectedComponentLabelAlg() {
         bgColor = 255; // black color
     }
@@ -183,7 +182,7 @@ public class FastConnectedComponentLabelAlg {
     private void mergeLabels(int index) {
         int row = index / dw;
         int col = index % dw;
-
+        System.out.println("outdata : "+outData.length);
         // get current possible existed labels
         int min = getLabel(outData, row, col);
         if(min == 0) return;
@@ -315,28 +314,22 @@ public class FastConnectedComponentLabelAlg {
      * height = 5, width = 11
      * @param args
      */
-    public static int[] imageData = new int[]{
-            255, 0,   0,   255,   0,   255, 255, 0,   255, 255, 255,
-            255, 0,   0,   255,   0,   255, 255, 0,   0,   255, 0,
-            255, 0,   0,   0,     255, 255, 255, 255, 255, 0,   0,
-            255, 255, 0,   255,   255, 255, 0,   255, 0,   0,   255,
-            255, 255, 0,   0,     0,   0,   255, 0,   0,   0,   0
-    };
 
-    public static void main(String[] args) {
-        FastConnectedComponentLabelAlg ccl = new FastConnectedComponentLabelAlg();
-        int[] outData = ccl.doLabel(imageData, 11, 5);
-        for(int i=0; i<5; i++) {
-            System.out.println("--------------------");
-            for(int j = 0; j<11; j++) {
-                int index = i * 11 + j;
-                if(j != 0) {
-                    System.out.print(",");
-                }
-                System.out.print(outData[index]);
-            }
-            System.out.println();
-        }
-    }
+
+//    public static void main(String[] args) {
+//        FastConnectedComponentLabelAlg ccl = new FastConnectedComponentLabelAlg();
+//        int[] outData = ccl.doLabel(imageData, 11, 5);
+//        for(int i=0; i<5; i++) {
+//            System.out.println("--------------------");
+//            for(int j = 0; j<11; j++) {
+//                int index = i * 11 + j;
+//                if(j != 0) {
+//                    System.out.print(",");
+//                }
+//                System.out.print(outData[index]);
+//            }
+//            System.out.println();
+//        }
+//    }
 
 }

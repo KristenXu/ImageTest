@@ -1,4 +1,5 @@
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class FindRiceFilter extends AbstractBufferedImageOp {
 
         if ( dest == null )
             dest = createCompatibleDestImage( src, null );
-
+        System.out.println("width : "+width+"; height : "+height);
         int[] inPixels = new int[width*height];
         int[] outPixels = new int[width*height];
         getRGB(src, 0, 0, width, height, inPixels );
@@ -29,6 +30,8 @@ public class FindRiceFilter extends AbstractBufferedImageOp {
         FastConnectedComponentLabelAlg fccAlg = new FastConnectedComponentLabelAlg();
         fccAlg.setBgColor(0);
         int[] outData = fccAlg.doLabel(inPixels, width, height);
+        System.out.println("outData : "+outData);
+
         // labels statistic
         HashMap<Integer, Integer> labelMap = new HashMap<Integer, Integer>();
         for(int d=0; d<outData.length; d++) {

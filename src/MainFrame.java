@@ -25,6 +25,7 @@ public class MainFrame extends JComponent implements ActionListener {
     public final static String FUN_CMD = "Colorful Rice";
 
     private BufferedImage rawImg;
+    private BufferedImage chageImg;
     private BufferedImage resultImage;
     private MediaTracker tracker;
     private Dimension mySize;
@@ -75,7 +76,7 @@ public class MainFrame extends JComponent implements ActionListener {
 //      minX = minY =  10000;
 //      maxX = maxY = -1;
 
-        mySize = new Dimension(500, 300);
+        mySize = new Dimension(700, 500);
         JFrame demoUI = new JFrame("Image Detection Demo");
         demoUI.getContentPane().setLayout(new BorderLayout());
         demoUI.getContentPane().add(this, BorderLayout.CENTER);
@@ -88,29 +89,29 @@ public class MainFrame extends JComponent implements ActionListener {
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         if(rawImg != null) {
-            Image scaledImage = rawImg.getScaledInstance(200, 200, Image.SCALE_FAST);
-            g2.drawImage(scaledImage, 0, 0, 200, 200, null);
+            Image scaledImage = rawImg.getScaledInstance(200, 300, Image.SCALE_FAST);
+            g2.drawImage(scaledImage, 0, 0, 200, 300, null);
         }
         if(resultImage != null) {
-            Image scaledImage = resultImage.getScaledInstance(200, 200, Image.SCALE_FAST);
-            g2.drawImage(scaledImage, 210, 0, 200, 200, null);
+            Image scaledImage = resultImage.getScaledInstance(200, 300, Image.SCALE_FAST);
+            g2.drawImage(scaledImage, 210, 0, 200, 300, null);
         }
 
         g2.setPaint(Color.RED);
         g2.setFont(new Font("楷体",Font.PLAIN,15));
         if(blackNum > 0) {
-            //g2.drawString("Number : " + riceNum, 100, 230);
-            g2.drawString("BlackArea : " + blackNum + "; ImageArea : " + pixelsNum, 100, 250);
+            g2.drawString("Number : " + riceNum, 100, 330);
+            g2.drawString("BlackArea : " + blackNum + "; ImageArea : " + pixelsNum, 100, 350);
         } else {
-            //g2.drawString("Number : Unknown", 100, 230);
-            g2.drawString("BlackArea : Unknown", 100, 250);
+            g2.drawString("Number : Unknown", 100, 330);
+            g2.drawString("BlackArea : Unknown", 100, 350);
         }
 
         if(blackNum>0&&pixelsNum>0){
             blackPercent=(Math.round(blackNum*100.0/pixelsNum));
-            g2.drawString("BlackPercent : " + blackPercent + "%" , 100, 270);
+            g2.drawString("BlackPercent : " + blackPercent + "%" , 100, 370);
         }else{
-            g2.drawString("BlackPercent : Unknown", 100, 270);
+            g2.drawString("BlackPercent : Unknown", 100, 370);
         }
 
     }
@@ -145,33 +146,35 @@ public class MainFrame extends JComponent implements ActionListener {
                 mf.printStackTrace();
             }
 //            if(f == null) return;
-            java.util.Properties properties = System.getProperties();
-            System.out.println("system : "+ properties);
-            JTextArea jta = new JTextArea(properties.toString());
-            JScrollPane jsp = new JScrollPane(jta){
-                @Override
-                public Dimension getPreferredSize() {
-                    return new Dimension(480, 320);
-                }
-            };
-            JOptionPane.showMessageDialog(this, jsp,
-                    "Error",JOptionPane.ERROR_MESSAGE);
-            File path = new File("/Users/xuchen/Desktop/图像源");
-            File[] files = path.listFiles();
-            File lastModifiedFile = files[0];
-            for(int index = 0;index<files.length;index++){
-                if(lastModifiedFile.lastModified() <= files[index].lastModified()){
-                    lastModifiedFile = files[index];
-                }
-            }
-
-            try {
-                bImage = ImageIO.read(lastModifiedFile);
-                System.out.println("lastModified : "+lastModifiedFile.getName());
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            //获取系统信息
+//            java.util.Properties properties = System.getProperties();
+//            System.out.println("system : "+ properties);
+//            JTextArea jta = new JTextArea(properties.toString());
+//            JScrollPane jsp = new JScrollPane(jta){
+//                @Override
+//                public Dimension getPreferredSize() {
+//                    return new Dimension(480, 320);
+//                }
+//            };
+//            JOptionPane.showMessageDialog(this, jsp,
+//                    "Error",JOptionPane.ERROR_MESSAGE);
+            //获取最近修改文件
+//            File path = new File("/Users/xuchen/Desktop/图像源");
+//            File[] files = path.listFiles();
+//            File lastModifiedFile = files[0];
+//            for(int index = 0;index<files.length;index++){
+//                if(lastModifiedFile.lastModified() <= files[index].lastModified()){
+//                    lastModifiedFile = files[index];
+//                }
+//            }
+//
+//            try {
+//                bImage = ImageIO.read(lastModifiedFile);
+//                System.out.println("lastModified : "+lastModifiedFile.getName());
+//
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
 
 //            BufferedImage bImage = null;
 //            URL url=null;
@@ -181,13 +184,11 @@ public class MainFrame extends JComponent implements ActionListener {
 //            }catch (MalformedURLException e2){
 //                e2.printStackTrace();
 //            }
-//            try {
-//                bImage = ImageIO.read(url);
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//            }
-
-
+            try {
+                bImage = ImageIO.read(url);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
 
             tracker = new MediaTracker(this);
             tracker.addImage(bImage, 1);
@@ -206,11 +207,12 @@ public class MainFrame extends JComponent implements ActionListener {
             repaint();
         } else if(NOISE_CMD.equals(e.getActionCommand())) {
             BinaryFilter bfilter = new BinaryFilter();
-            rawImg = bfilter.filter(rawImg, null);
+//            rawImg = bfilter.filter(rawImg, null);
+            chageImg = bfilter.filter(rawImg, null);
             blackNum = bfilter.getBlackNum();
             pixelsNum = bfilter.getPixelsNum();
             FindRiceFilter frFilter = new FindRiceFilter();
-            resultImage = frFilter.filter(rawImg, null);
+            resultImage = frFilter.filter(chageImg, null);
             riceNum = frFilter.getSumRice();
             repaint();
         } else if(FUN_CMD.equals(e.getActionCommand())) {
