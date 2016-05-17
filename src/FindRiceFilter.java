@@ -27,10 +27,10 @@ public class FindRiceFilter extends AbstractBufferedImageOp {
         int[] outPixels = new int[width*height];
         getRGB(src, 0, 0, width, height, inPixels );
 
-        FastConnectedComponentLabelAlg fccAlg = new FastConnectedComponentLabelAlg();
+//        FastConnectedComponentLabelAlg fccAlg = new FastConnectedComponentLabelAlg();
+        AdjustableConnectedComponentLabelAlg fccAlg = new AdjustableConnectedComponentLabelAlg();
         fccAlg.setBgColor(0);
         int[] outData = fccAlg.doLabel(inPixels, width, height);
-        System.out.println("outData : "+outData);
 
         // labels statistic
         HashMap<Integer, Integer> labelMap = new HashMap<Integer, Integer>();
@@ -49,7 +49,7 @@ public class FindRiceFilter extends AbstractBufferedImageOp {
         // try to find the max connected component
         Integer[] keys = labelMap.keySet().toArray(new Integer[0]);
         Arrays.sort(keys);
-        int threshold = 10;
+        int threshold = 60;
         ArrayList<Integer> listKeys = new ArrayList<Integer>();
         for(Integer key : keys) {
             if(labelMap.get(key) <=threshold){

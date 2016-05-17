@@ -214,6 +214,7 @@ public class MainFrame extends JComponent implements ActionListener {
             FindRiceFilter frFilter = new FindRiceFilter();
             resultImage = frFilter.filter(chageImg, null);
             riceNum = frFilter.getSumRice();
+//            riceNum =(int) (Math.round(blackNum*100.0/pixelsNum))/10 +1;
             repaint();
         } else if(FUN_CMD.equals(e.getActionCommand())) {
             ColorfulRiceFilter cFilter = new ColorfulRiceFilter();

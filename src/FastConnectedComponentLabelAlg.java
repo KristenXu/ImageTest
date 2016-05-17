@@ -13,6 +13,15 @@ public class FastConnectedComponentLabelAlg {
     public FastConnectedComponentLabelAlg() {
         bgColor = 255; // black color
     }
+//    public static int[] imageData = new int[]{
+//            255, 0,   0,   255,   0,   255, 255, 0,   255, 255, 255,
+//            255, 0,   0,   255,   0,   255, 255, 0,   0,   255, 0,
+//            255, 0,   0,   0,     255, 255, 255, 255, 255, 0,   0,
+//            255, 255, 0,   255,   255, 255, 0,   255, 0,   0,   255,
+//            255, 255, 0,   0,     0,   0,   255, 0,   0,   0,   0
+//    };
+//    FastConnectedComponentLabelAlg ccl = new FastConnectedComponentLabelAlg();
+//    int[] outData = ccl.doLabel(imageData, 11, 5);
 
     public int[] doLabel(int[] inPixels, int width, int height) {
         dw = width;
@@ -182,7 +191,6 @@ public class FastConnectedComponentLabelAlg {
     private void mergeLabels(int index) {
         int row = index / dw;
         int col = index % dw;
-        System.out.println("outdata : "+outData.length);
         // get current possible existed labels
         int min = getLabel(outData, row, col);
         if(min == 0) return;
